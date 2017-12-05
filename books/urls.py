@@ -9,7 +9,7 @@ urlpatterns = [
     url(r'^deals/$', views.deals, name='deals'),
     url(r'^contact/$', views.contact, name='contact'),
     url(r'^(?P<id>\d+)/(?P<slug>[-\w]+)/$',
-        views.book_detail, 
+        views.book_detail,
         name='book_detail'),
     url(r'^subscribe/', views.subscribe, name='subscribe'),
     url(r'^login', views.login, name='login'),

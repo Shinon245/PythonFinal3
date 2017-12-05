@@ -100,4 +100,8 @@ class Pokemon(models.Model):
     name = models.CharField(max_length=30, db_index=True)
     available = models.BooleanField(db_index=True)
     image = models.CharField(max_length=100, db_index=True)
+    pokedex = models.IntegerField()
+    type = models.CharField(max_length=30,db_index=True)
+    summary = models.CharField(max_length=200,db_index=True)
+
 

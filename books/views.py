@@ -16,10 +16,8 @@ from .forms import AccountForm, AccountEditForm,ProfileEditForm
 # Create your views here.
 def index(request):
     context = {'nbar': 'home', 
-                'heading': 'PokeTeam',
-                'mission': 'where you can customize a team of pokemon',
-                'deals': [('black friday deal', 'https://placehold.it/150x80?text=IMAGE', 'Buy 50 mobiles and get a gift card'),
-                ('christmas deal', 'https://placehold.it/150x80?text=No+Image', 'Buy 1 mobile and get 1 free')]
+                'heading': 'PokeDex Online',
+                'mission': 'Your #1 Source For Pokemon Information',
             }
     return render(request, 'books/index.html', context)
 
@@ -33,10 +31,10 @@ def book_list(request):
     return render(request, 'books/list.html', context)
 
 def book_detail(request, id, slug):
-    book = get_object_or_404(Book, id=id, slug=slug, available=True)
+    book = get_object_or_404(Pokemon, id=id, slug=slug, available=True)
     context = {
                 'nbar': 'books',
-                'pageTitle': book.title,
+                'pageTitle': Pokemon.name,
                 'book': book
     }
     return render(request, 'books/detail.html', context)
@@ -74,23 +72,12 @@ def contact(request):
         'panelBody': """
             <!-- List group -->
             <ul class="list-group">
-            <li class="list-group-item"><strong>Corporate Office: </strong><br />
-                <address>111 University Blvd<br>
-                        Grand Junction, CO 81501 <br>
-                        &phone;: (970) 123-4567<br>
-                        <span class="glyphicon glyphicon-envelope"></span>: help@amazing.com<br>
+            <li class="list-group-item"><strong>Professor Oak: </strong><br />
+                <address>123 Oak Drive<br>
+                        Pallet Town, Kanto <br>
+                        &phone;: (123)-456-7890<br>
+                        <span class="glyphicon glyphicon-envelope"></span>: oak@professor.com<br>
                 </address>
-            </li>
-            <li class="list-group-item"><strong>Denver Office: </strong><br />
-                <address>123 Amazing Street</br>
-                        Denver, CO 81111 <br>
-                        &phone;: (970) 123-1234<br>
-                        <span class="glyphicon glyphicon-envelope"></span>: denver@amazing.com<br>
-                </address>
-            </li>
-            <li class="list-group-item">Porta ac consectetur ac</li>
-            <li class="list-group-item">Vestibulum at eros</li>
-            </ul>
             
         """,
     }
@@ -120,7 +107,7 @@ def login(request):
                 error_message = ["Invalid username or password."]
 
         if valid:
-            return HttpResponseRedirect(reverse('dashboard'))
+            return HttpResponseRedirect(reverse('index'))
         else:
             return render(request,
                           'books/login.html',
@@ -276,7 +263,7 @@ def search(request):
     if 'search' in request.GET:
         q = request.GET.get('search', '')
         if q:
-            books = Book.objects.filter(title__icontains=q)
+            books = Pokemon.objects.filter(name__icontains=q)
             context['pageTitle']= 'Search results'
             context['panelTitle'] = '%d matching results'%len(books)
             context['books'] = books

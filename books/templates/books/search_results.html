@@ -18,14 +18,9 @@
                 {% endthumbnail %}
                 </div>
                 <div class="media-body">
-                    <h5 class="media-heading">{{ book.title }}</h5>
-                     Author{{ book.authors.all|pluralize }}:
-                        {% for author in book.authors.all %}
-                            <a href="#"> {{ author }}</a>
-                        {% endfor %}
-                    <p>{{ book.description|safe|truncatewords:"20" }}</p>
-                    <p><a href="{{ book.get_absolute_url }}" class="btn btn-default" 
-                        role="button">Detail</a></p>
+                    <h5 class="media-heading">Pokedex: #{{ book.pokedex }}</h5>
+                    <h6>{{ book.name}}</h6>
+                    <p1>Summary: {{book.summary}}</p1>
                 </div>
             </div>
             <hr>

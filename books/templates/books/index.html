@@ -3,24 +3,16 @@
 {% block jumbotron %}
 <div style="background-color:#df0000"class="jumbotron">
   <div class="container text-center">
-    <h1>{{ heading }}</h1>      
+    <h1>{{ heading }}</h1>
     <p>{{ mission }}</p>
   </div>
 </div>
 {% endblock %}
 
 {% block content %}
-<div class="container">    
+<div class="container">
   <div class="row">
-    {% for deal in deals %}
-    <div class="col-sm-4">
-      <div class="panel panel-primary">
-        <div class="panel-heading">{{ deal.0|upper }}</div>
-        <div class="panel-body"><img src="{{ deal.1 }}" class="img-responsive" style="width:100%" alt="Image"></div>
-        <div class="panel-footer">{{ deal.2 }}</div>
-      </div>
-    </div>
-    {% endfor %}
+    <h1>Check here for updates on our Pokedex in the future, and welcome to your number one source for Pokemon information.</h1>
   </div>
 </div><br><br>
 {% endblock %}

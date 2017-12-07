@@ -9,35 +9,33 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
 from django.forms import ModelForm
 from django.conf import settings
-from .models import Book, Subscription, Profile, Pokemon
+from .models import Subscription, Profile, Pokemon
 from .forms import AccountForm, AccountEditForm,ProfileEditForm
 
 
 # Create your views here.
 def index(request):
-    context = {'nbar': 'home', 
+    result = Profile.objects.filter(user=request.user)
+    context = {'nbar': 'home',
                 'heading': 'PokeDex Online',
                 'mission': 'Your #1 Source For Pokemon Information',
+                'pokemons': result[0].favorites.all,
             }
-    return render(request, 'books/index.html', context)
+    return render(request, 'pokemon/index.html', context)
 
 def book_list(request):
 
     context = {
-        'nbar': 'books',
-        'pageTitle': 'Books',
-        'books': Pokemon.objects.all(),
+        'nbar': 'pokedex',
+        'pageTitle': 'Pokemon',
+        'pokemons': Pokemon.objects.all(),
     }
-    return render(request, 'books/list.html', context)
+    return render(request, 'pokemon/list.html', context)
 
-def book_detail(request, id, slug):
-    book = get_object_or_404(Pokemon, id=id, slug=slug, available=True)
-    context = {
-                'nbar': 'books',
-                'pageTitle': Pokemon.name,
-                'book': book
-    }
-    return render(request, 'books/detail.html', context)
+@login_required
+def add_to_cart(request,book_id):
+    return HttpResponseRedirect('index')
+
 
 def subscribe(request):
     errors = []
@@ -51,18 +49,10 @@ def subscribe(request):
             context['pageTitle']= 'Thank you!'
             context['panelTitle'] = 'Thank you!'
             context['panelBody'] = 'Thank you for subscribing to our mailing list.'
-            return render(request, 'books/static.html', context)
+            return render(request, 'pokemon/static.html', context)
     else:
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
-def deals(request):
-    context = {
-        'nbar': 'deals',
-        'pageTitle': 'Deals',
-        'panelTitle': 'Deals',
-        'panelBody': '<strong>Sorry, no deals at this time. Sign up to get deals delivered right to your inbox...</strong>'
-    }
-    return render(request, 'books/static.html', context)
 
 def contact(request):
     context = {
@@ -81,7 +71,7 @@ def contact(request):
             
         """,
     }
-    return render(request, 'books/static.html', context)
+    return render(request, 'pokemon/static.html', context)
 
 def login(request):
     # print('site = ', request.get_host())
@@ -110,7 +100,7 @@ def login(request):
             return HttpResponseRedirect(reverse('index'))
         else:
             return render(request,
-                          'books/login.html',
+                          'pokemon/login.html',
                           {
                            'errorMessage': ' '.join(error_message),
                            'username': username,
@@ -121,7 +111,7 @@ def login(request):
         # No context variables to pass to the template system, hence blank
         # dictionary object...
         return render(request,
-                      'books/login.html',
+                      'pokemon/login.html',
                       {
                           'pageTitle': 'Login',
                       })
@@ -129,6 +119,9 @@ def login(request):
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse('index'))
+
+def addboitolist(request):
+    return HttpResponseRedirect('index')
 
 def signup(request):
     valid = False
@@ -185,7 +178,7 @@ def signup(request):
                                      href="{url}">Login</a>.
                                      '''.format(url=reverse('login'))]
             return render(request,
-                        'books/message.html',
+                        'pokemon/message.html',
                         {
                             'pageTitle': 'Feedback',
                             'messageType': 'success',
@@ -194,7 +187,7 @@ def signup(request):
 
         else:
             return render(request,
-                        'books/signup.html',
+                        'pokemon/signup.html',
                         {
                             'pageTitle': 'Account Registration',
                             'panelTitle': 'Account Registration',
@@ -206,56 +199,12 @@ def signup(request):
     else:
         accForm = AccountForm()
         return render(request,
-                      'books/signup.html',
+                      'pokemon/signup.html',
                       {
                           'pageTitle': 'Account Registration',
                           'panelTitle': 'Account Registration',
                           'accountForm': accForm,
                       })
-
-    
-@login_required  
-def dashboard(request):
-    context = {
-        'pageTitle': 'Dashboard',
-        'panelTitle': 'Dashboard',
-        'panelBody': '<strong>TBD... Display account dashboard here...</strong>'
-    }
-    return render(request, 'books/static.html', context)
-
-
-@login_required
-def account(request):
-    errorMessage = []
-    errorType = 'danger'
-    if request.method == 'POST':
-        accForm = AccountEditForm(instance=request.user,
-                                 data=request.POST,
-                                 )
-        profileForm = ProfileEditForm(instance=request.user.profile,
-                                    data=request.POST,
-                                    files=request.FILES)
-        if accForm.is_valid() and profileForm.is_valid():
-            accForm.save()
-            profileForm.save()
-            errorMessage.append('Account update successful!')
-            errorType = 'success'
-        else:
-            for k in accForm.errors:
-                errorMessage.append(accForm.errors[k])
-    else:
-        accForm = AccountEditForm(instance=request.user)
-        profileForm = ProfileEditForm(instance=request.user.profile)
-
-    return render(request, 'books/account.html', 
-                    {   
-                        'pageTitle': 'Account Update',
-                        'panelTitle': 'Account Update',
-                        'accountForm': accForm,
-                        'profileForm': profileForm,
-                        'errorMessage': '<br>'.join(errorMessage),
-                        'errorType': errorType
-                    })
 
 
 def search(request):
@@ -263,10 +212,10 @@ def search(request):
     if 'search' in request.GET:
         q = request.GET.get('search', '')
         if q:
-            books = Pokemon.objects.filter(name__icontains=q)
+            pokemon = Pokemon.objects.filter(name__icontains=q)
             context['pageTitle']= 'Search results'
-            context['panelTitle'] = '%d matching results'%len(books)
-            context['books'] = books
-            return render(request, 'books/search_results.html', context)
+            context['panelTitle'] = '%d matching results'%len(pokemon)
+            context['pokemons'] = pokemon
+            return render(request, 'pokemon/search_results.html', context)
     
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

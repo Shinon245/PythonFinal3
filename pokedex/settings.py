@@ -53,7 +53,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'bookstore.urls'
+ROOT_URLCONF = 'pokedex.urls'
 
 TEMPLATES = [
     {
@@ -71,7 +71,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'bookstore.wsgi.application'
+WSGI_APPLICATION = 'pokedex.wsgi.application'
 
 
 # Database

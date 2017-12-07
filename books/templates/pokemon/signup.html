@@ -1,4 +1,4 @@
-{% extends 'books/base.html' %}
+{% extends 'pokemon/base.html' %}
 {% block title %}{{ pageTitle }}{% endblock %}
 {% block content %}
 <div class="container-fluid">
@@ -8,20 +8,19 @@
         </div>
         <div class="panel-body">
             {% if errorMessage %}
-                <div class="alert alert-{{ errorType }} fade-in form-group center" role="alert">
+                <div class="alert alert-danger fade-in form-group center" role="alert">
                     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                     <span class="sr-only">Error:</span>
                     {{ errorMessage |safe}}
                 </div>
             {% endif %}
-            <p>Please update account information using the following form:</p>
-            <form action='.' method="post" enctype="multipart/form-data">
+            <p>Please signup using the following form:</p>
+            <form action='.' method="post">
                 {% csrf_token %}
                 <table>
                 {{ accountForm.as_table }}
-                {{ profileForm.as_table }}
                 </table>
-                <p><button type="submit" class="btn btn-success">Update</button></p>
+                <p><button type="submit" class="btn btn-success">Signup</button></p>
             </form>
         </div>
     </div>

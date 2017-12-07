@@ -13,7 +13,7 @@
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
         <li class="{% if nbar == 'home' %}active{% endif %}"><a href="{% url 'index' %}">Home</a></li>
-        <li class="{% if nbar == 'books' %}active{% endif %}"><a href="{% url 'books' %}">PokeDex</a></li>
+        <li class="{% if nbar == 'pokedex' %}active{% endif %}"><a href="{% url 'pokemon' %}">PokeDex</a></li>
         <li class="{% if nbar == 'contact' %}active{% endif %}"><a href="{% url 'contact' %}">Contact</a></li>
         <li class="navbar-form navbar-left">
             <form class="form-inline" role="search" action="{% url 'search' %}" method="get" id="search">

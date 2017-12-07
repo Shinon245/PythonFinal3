@@ -1,26 +1,26 @@
-{% extends 'books/base.html' %}
+{% extends 'pokemon/base.html' %}
 {% load thumbnail %}
 {% block title %}{{ pageTitle }}{% endblock %}
 {% block content %}
 <div class="container-fluid">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">{{ books.count }} matching result{{ books.count|pluralize }}</h3>
+            <h3 class="panel-title">{{ pokemon.count }} matching result{{ pokemon.count|pluralize }}</h3>
         </div>
         <div class="panel-body">
-            {% for book in books %}
+            {% for pokemon in pokemons %}
             <div class="media">
                 <div class="media-left">
-                {% thumbnail book.image "100" as im %}
-                    <a href="{{ book.image.url }}">
+                {% thumbnail pokemon.image "100" as im %}
+                    <a href="{{ pokemon.image.url }}">
                         <img src="{{ im.url }} " class="media-object" alt="Thumbnail">
                     </a>
                 {% endthumbnail %}
                 </div>
                 <div class="media-body">
-                    <h5 class="media-heading">Pokedex: #{{ book.pokedex }}</h5>
-                    <h6>{{ book.name}}</h6>
-                    <p1>Summary: {{book.summary}}</p1>
+                    <h5 class="media-heading">Pokedex: #{{ pokemon.pokedex }}</h5>
+                    <h6>{{ pokemon.name}}</h6>
+                    <p1>Summary: {{pokemon.summary}}</p1>
                 </div>
             </div>
             <hr>
